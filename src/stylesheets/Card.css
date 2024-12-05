@@ -1,0 +1,12 @@
+.card {
+	border: solid 1px white;
+	justify-self: center;
+}
+
+.card img {
+	height: 80px;
+}
+
+.true {
+	border: solid 1px red;
+}

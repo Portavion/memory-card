@@ -1,0 +1,9 @@
+.score {
+	text-align: right;
+
+	color: goldenrod;
+	font-size: small;
+
+	padding: 0px 1em;
+	margin: 0px;
+}

@@ -1,35 +1,52 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.css";
+import { CardContainer } from "./components/CardContainer.jsx";
+import { Header } from "./components/Header.jsx";
+import { Score } from "./components/Score.jsx";
+import { useState } from "react";
 
 function App() {
-  const [count, setCount] = useState(0)
+	const [currentScore, setCurrentScore] = useState(0);
+	const [bestScore, setBestScore] = useState(0);
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+	const handleScoreIncrease = () => {
+		setCurrentScore(currentScore + 1);
+	};
+
+	const handleBestScore = () => {
+		setBestScore(currentScore);
+		setCurrentScore(0);
+	};
+
+	function generateArray(amount) {
+		const maxPokemonNb = 151;
+		let newIds = [];
+		let counter = 0;
+
+		while (counter < amount) {
+			let randomId = Math.floor(Math.random() * maxPokemonNb + 1);
+
+			if (newIds.includes(randomId) === false) {
+				newIds.push(randomId);
+				counter = counter + 1;
+			}
+		}
+		return newIds;
+	}
+
+	const initialArray = generateArray(12);
+	console.log(initialArray);
+
+	return (
+		<>
+			<Header></Header>
+			<Score currentScore={currentScore} bestScore={bestScore}></Score>
+			<CardContainer
+				handleScoreIncrease={handleScoreIncrease}
+				handleBestScore={handleBestScore}
+				initialArray={initialArray}
+			></CardContainer>
+		</>
+	);
 }
 
-export default App
+export default App;

@@ -1,0 +1,18 @@
+.logo {
+	height: 1em;
+	padding: 0px 10px;
+}
+
+h1 {
+	display: flex;
+	height: 1em;
+	font-size: large;
+	justify-content: center;
+	align-items: center;
+}
+
+.instructions {
+	text-align: center;
+	padding: 0px 1em;
+	margin: 0px;
+}
