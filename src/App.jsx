@@ -3,12 +3,15 @@ import { CardContainer } from "./components/CardContainer.jsx";
 import { Header } from "./components/Header.jsx";
 import { Score } from "./components/Score.jsx";
 import { useState, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 function App() {
 	const [currentScore, setCurrentScore] = useState(0);
 	const [bestScore, setBestScore] = useState(0);
 	const [pokemons, setPokemons] = useState([]);
 	const [ids, setIds] = useState(generateArray(12));
+
+	let cardContainerKey = uuidv4();
 
 	const handleScoreIncrease = () => {
 		setCurrentScore(currentScore + 1);
@@ -35,27 +38,47 @@ function App() {
 		return newIds;
 	}
 
-	const fetchPokemon = async (id) => {
-		const response = await fetch(
-			`https://pokeapi.co/api/v2/pokemon/${id}/`,
-			{
-				method: "GET",
-				mode: "cors",
-			}
-		);
+	// const fetchPokemon = async (id) => {
+	// 	const response = await fetch(
+	// 		`https://pokeapi.co/api/v2/pokemon/${id}/`,
+	// 		{
+	// 			method: "GET",
+	// 			mode: "cors",
+	// 		}
+	// 	);
 
-		const json = await response.json();
-		const newPokemon = await {
-			name: json.name,
-			id: json.id,
-			img: json.sprites.versions["generation-vii"]["ultra-sun-ultra-moon"]
-				.front_default,
-			isClicked: false,
-		};
-		setPokemons((pokemons) => shuffle([...pokemons, newPokemon]));
-	};
+	// 	const json = await response.json();
+	// 	const newPokemon = await {
+	// 		name: json.name,
+	// 		id: json.id,
+	// 		img: json.sprites.versions["generation-vii"]["ultra-sun-ultra-moon"]
+	// 			.front_default,
+	// 		isClicked: false,
+	// 	};
+	// 	setPokemons((pokemons) => shuffle([...pokemons, newPokemon]));
+	// };
 
 	useEffect(() => {
+		const fetchPokemon = async (id) => {
+			const response = await fetch(
+				`https://pokeapi.co/api/v2/pokemon/${id}/`,
+				{
+					method: "GET",
+					mode: "cors",
+				}
+			);
+
+			const json = await response.json();
+			const newPokemon = await {
+				name: json.name,
+				id: json.id,
+				img: json.sprites.versions["generation-vii"][
+					"ultra-sun-ultra-moon"
+				].front_default,
+				isClicked: false,
+			};
+			setPokemons((pokemons) => shuffle([...pokemons, newPokemon]));
+		};
 		for (let i in ids) {
 			fetchPokemon(ids[i]);
 		}
@@ -103,6 +126,13 @@ function App() {
 		return array;
 	}
 
+	function resetGame() {
+		setPokemons([]);
+		// setIds([]);
+		cardContainerKey = uuidv4();
+		setIds(generateRandomPokemon(12));
+	}
+
 	const handleClick = (event) => {
 		const clickedId = event.target.id;
 		const clickStatus = pokemons.find(
@@ -112,10 +142,7 @@ function App() {
 		if (clickStatus) {
 			handleBestScore();
 			alert("already clicked you lost");
-
-			setPokemons([]);
-			setIds([]);
-			setIds(generateRandomPokemon(12));
+			resetGame();
 		} else {
 			const modifiedArray = pokemons.map((pokemon) => {
 				if (pokemon.id == clickedId) {
@@ -127,6 +154,7 @@ function App() {
 					return pokemon;
 				}
 			});
+
 			setPokemons(shuffle(modifiedArray));
 			handleScoreIncrease();
 			handleListIncrease(modifiedArray);
@@ -138,8 +166,7 @@ function App() {
 			<Header></Header>
 			<Score currentScore={currentScore} bestScore={bestScore}></Score>
 			<CardContainer
-				// handleScoreIncrease={handleScoreIncrease}
-				// handleBestScore={handleBestScore}
+				key={cardContainerKey}
 				pokemons={pokemons}
 				handleClick={handleClick}
 			></CardContainer>
