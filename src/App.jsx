@@ -20,7 +20,9 @@ function App() {
 	};
 
 	const handleBestScore = () => {
-		setBestScore(currentScore);
+		if (currentScore > bestScore) {
+			setBestScore(currentScore);
+		}
 		setCurrentScore(0);
 	};
 
@@ -113,7 +115,7 @@ function App() {
 
 		if (clickStatus) {
 			handleBestScore();
-			alert("already clicked you lost");
+			alert("You lost! Your score is: " + currentScore);
 			resetGame();
 		} else {
 			const modifiedArray = pokemons.map((pokemon) => {
