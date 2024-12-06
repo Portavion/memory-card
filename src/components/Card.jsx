@@ -14,6 +14,7 @@ export function Card({
 					src={pokemonImg}
 					alt={pokemonName}
 					onClick={handleClick}
+					// eslint-disable-next-line react/no-unknown-property
 					isClicked={isClicked}
 					id={id}
 				/>
