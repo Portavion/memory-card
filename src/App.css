@@ -4,3 +4,9 @@
 	/* padding: 2rem;
 	text-align: center; */
 }
+
+.start {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}

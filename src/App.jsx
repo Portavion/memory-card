@@ -9,7 +9,9 @@ function App() {
 	const [currentScore, setCurrentScore] = useState(0);
 	const [bestScore, setBestScore] = useState(0);
 	const [pokemons, setPokemons] = useState([]);
-	const [ids, setIds] = useState(generateArray(12));
+	// const [ids, setIds] = useState(generateArray(12));
+	const [ids, setIds] = useState([]);
+	const [start, setStart] = useState(false);
 
 	let cardContainerKey = uuidv4();
 
@@ -21,42 +23,6 @@ function App() {
 		setBestScore(currentScore);
 		setCurrentScore(0);
 	};
-
-	function generateArray(amount) {
-		const maxPokemonNb = 151;
-		let newIds = [];
-		let counter = 0;
-
-		while (counter < amount) {
-			let randomId = Math.floor(Math.random() * maxPokemonNb + 1);
-
-			if (newIds.includes(randomId) === false) {
-				newIds.push(randomId);
-				counter = counter + 1;
-			}
-		}
-		return newIds;
-	}
-
-	// const fetchPokemon = async (id) => {
-	// 	const response = await fetch(
-	// 		`https://pokeapi.co/api/v2/pokemon/${id}/`,
-	// 		{
-	// 			method: "GET",
-	// 			mode: "cors",
-	// 		}
-	// 	);
-
-	// 	const json = await response.json();
-	// 	const newPokemon = await {
-	// 		name: json.name,
-	// 		id: json.id,
-	// 		img: json.sprites.versions["generation-vii"]["ultra-sun-ultra-moon"]
-	// 			.front_default,
-	// 		isClicked: false,
-	// 	};
-	// 	setPokemons((pokemons) => shuffle([...pokemons, newPokemon]));
-	// };
 
 	useEffect(() => {
 		const fetchPokemon = async (id) => {
@@ -129,9 +95,15 @@ function App() {
 	function resetGame() {
 		setPokemons([]);
 		// setIds([]);
-		cardContainerKey = uuidv4();
-		setIds(generateRandomPokemon(12));
+		setStart(false);
+		//setIds(generateRandomPokemon(12));
 	}
+
+	const init = () => {
+		setIds(generateRandomPokemon(12));
+		setStart(true);
+		cardContainerKey = uuidv4();
+	};
 
 	const handleClick = (event) => {
 		const clickedId = event.target.id;
@@ -160,18 +132,35 @@ function App() {
 			handleListIncrease(modifiedArray);
 		}
 	};
-
-	return (
-		<>
-			<Header></Header>
-			<Score currentScore={currentScore} bestScore={bestScore}></Score>
-			<CardContainer
-				key={cardContainerKey}
-				pokemons={pokemons}
-				handleClick={handleClick}
-			></CardContainer>
-		</>
-	);
+	if (start === false) {
+		return (
+			<>
+				<Header></Header>
+				<Score
+					currentScore={currentScore}
+					bestScore={bestScore}
+				></Score>
+				<div className="start">
+					<button onClick={init}>Start</button>
+				</div>
+			</>
+		);
+	} else {
+		return (
+			<>
+				<Header></Header>
+				<Score
+					currentScore={currentScore}
+					bestScore={bestScore}
+				></Score>
+				<CardContainer
+					key={cardContainerKey}
+					pokemons={pokemons}
+					handleClick={handleClick}
+				></CardContainer>
+			</>
+		);
+	}
 }
 
 export default App;
